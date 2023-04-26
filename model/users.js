@@ -21,7 +21,7 @@ var userSchema=mongoose.Schema({
     usertype:{
         type:String,
         required:true,
-        default:"user"
+        default:"customer"
     }
 
 

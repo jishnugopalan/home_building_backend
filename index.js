@@ -6,7 +6,9 @@ const cors = require("cors")
 const express = require('express')
 const app = express()
 const port = 3000
-// var userroutes = require('./routes/user')
+var authroutes = require('./routes/authroutes')
+var workroutes=require('./routes/workroutes')
+var coonectionroutes=require('./routes/connection')
 
 mongoose.set('strictQuery', true)
 mongoose.connect(process.env.DATABASE,{
@@ -16,11 +18,13 @@ mongoose.connect(process.env.DATABASE,{
   console.log("DB Connected")
 })
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit:'10mb'}))
 app.use(cookieParser());
 app.use(cors());
 
-// app.use('/api', userroutes)
+app.use('/api', authroutes)
+app.use('/api',workroutes)
+app.use('/api',coonectionroutes)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

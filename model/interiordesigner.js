@@ -38,14 +38,7 @@ var interiorDesignerSchema=mongoose.Schema({
         type:Number,
         required: true,
     },
-    company_pic:{
-        type:String,
-        
-    },
-    company_description:{
-        type:String
-    },
-    company_working_time:{
+    pic:{
         type:String
     }
       

@@ -26,7 +26,7 @@ exports.addUser=(req,res)=>{
                 if(err){
                 return res.status(404).json({error:err})
                 }
-                else{
+                else if(newUser){
                     if(req.body.usertype=="interior")
                     {
                        
@@ -35,6 +35,8 @@ exports.addUser=(req,res)=>{
                         
                         interior.save((err,newInterior)=>{
                             if(err){
+                                console.log(err)
+    
                                 return res.status(404).json({error:err})
                                 }
                                 else{
@@ -119,7 +121,21 @@ exports.login=(req,res)=>{
         else{
             return res.status(404).json({error:"Invalid email or password"})
         }
-    }
-        )
+    })
 }
+exports.findUser=(req,res)=>{
+    console.log(req.body)
+    User.findOne({_id:ObjectId(req.body.userid)},(err,user)=>{
+        if(err){
+            return res.status(404).json({error:"Error in fetching user"})
+        }
+        else if(user){
+            return res.status(201).json(user)
+        }
+        else{
+            return res.status(404).json({"error":"User not found"})
+        }
+    })
+}
+
  

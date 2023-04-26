@@ -47,6 +47,9 @@ var electronicsSchema=mongoose.Schema({
     },
     company_working_time:{
         type:String
+    },
+    pic:{
+        type:String
     }
       
 })

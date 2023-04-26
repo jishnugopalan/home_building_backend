@@ -7,10 +7,15 @@ const {ObjectId}=require("mongodb")
 
 
 exports.addWorks=(req,res)=>{
-    let newWork=Work(req.body)
+    console.log(req.body)
+    req.body.user=ObjectId(req.body.user)
+    let newWork=new Work(req.body)
     newWork.save((err,work)=>{
-        if(err)
+        if(err){
+            console.log(err)
         return res.status(404).json({msg:"Error in adding works"})
+            
+        }
         if(work)
         return res.status(201).json(work)
     })
@@ -18,7 +23,7 @@ exports.addWorks=(req,res)=>{
 }
 exports.viewWorkByWorkerId=(req,res)=>{
 
-    Worker.find({user:ObjectId(req.body.workerid)},(err,work)=>{
+    Work.find({user:ObjectId(req.body.workerid)},(err,work)=>{
         if(err)
         return res.status(404).json({msg:"Error in view work by worker"})
         if(work)
@@ -26,20 +31,28 @@ exports.viewWorkByWorkerId=(req,res)=>{
     })
 }
 exports.viewWorkByCustomer=(req,res)=>{
-    Worker.find({user:ObjectId(req.body.workerid)})((err,work)=>{
+    Work.find({user:ObjectId(req.body.workerid)}).populate("user").exec((err,work)=>{
         if(err)
         return res.status(404).json({msg:"Error in view work by customer"})
         if(work)
         return res.status(201).json(work)
     })
 }
-exports.viewWorkByWorkerId=(req,res)=>{
+exports.viewWorkId=(req,res)=>{
 
-    Worker.findOne({_id:ObjectId(req.body.workid)}).populate("user").exec((err,work)=>{
+    Work.findOne({_id:ObjectId(req.body.workid)}).populate("user").exec((err,work)=>{
         if(err)
         return res.status(404).json({msg:"Error in view work by id"})
         if(work)
         return res.status(201).json(work)  
+    })
+}
+exports.deleteWork=(req,res)=>{
+    Work.deleteOne({_id:ObjectId(req.body.workid)},(err,work)=>{
+        if(err)
+        return res.status(404).json({msg:"Error in view work by id"})
+        if(work)
+        return res.status(201).json(work)    
     })
 }
 
@@ -74,17 +87,29 @@ exports.ViewArchitect=(req,res)=>{
     Architect.findOne({user:ObjectId(req.body.workerid)}).populate("user").exec((err,architect)=>{
         if(err)
         return res.status(404).json({msg:"Error in getting architect"})
-        if(work)
+        if(architect)
         return res.status(201).json(architect)
     })   
 }
 
 exports.viewInterior=(req,res)=>{
+    console.log("in interior")
+    console.log(req.body)
     Interior.findOne({user:ObjectId(req.body.workerid)}).populate("user").exec((err,interior)=>{
-        if(err)
-        return res.status(404).json({msg:"Error in getting Interior"})
-        if(interior)
-        return res.status(201).json(interior)
+        if(err){
+            console.log(err)
+
+            return res.status(404).json({msg:"Error in getting Interior"})
+        }
+        if(interior){
+            console.log("inn")
+            return res.status(201).json(interior)
+            
+        }
+        else{
+            console.log("error")
+            return res.status(404).json({msg:"Error in getting Interior"})
+        }
     })
     
 }
